@@ -1,0 +1,160 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../iron-data-table/iron-data-table.html">
+<link rel="import" href="../iron-icon/iron-icon.html">
+<link rel="import" href="../iron-icons/iron-icons.html">
+<link rel="import" href="../paper-card/paper-card.html">
+<link rel="import" href="../paper-progress/paper-progress.html">
+<link rel="import" href="../paper-input/paper-input.html">
+<link rel="import" href="../paper-date-picker/paper-date-picker.html">
+<link rel="import" href="../paper-menu-button/paper-menu-button.html">
+
+<link rel="import" href="../oc-core-utils/formatter-behaviour.html">
+<link rel="import" href="../oc-core-utils/oc-app-styles.html">
+<link rel="import" href="oc-order-table-styles.html">
+
+<!--
+A table to display orders
+
+@demo
+-->
+<dom-module id="oc-order-table">
+
+  <template>
+    <style include="oc-app-styles oc-order-table-styles">
+      :host {
+        display: block;
+      }
+      iron-data-table[empty] {
+        height: 74px;
+      }
+      p {
+        text-align: center;
+      }
+      p[loading] {
+        display: none;
+      }
+      paper-menu-button {
+        width: 8em;
+      }
+    </style>
+
+    <paper-card>
+
+      <div>
+        <paper-menu-button>
+          <paper-input value="[[ formatDate(fromDate, '', 'YYYY-MM-DD') ]]" class="dropdown-trigger" label="From">
+            <iron-icon suffix icon="date-range"></iron-icon>
+          </paper-input>
+          <paper-date-picker id="fromDate" date="{{ fromDate }}" class="dropdown-content"></paper-date-picker>
+        </paper-menu-button>
+        <paper-menu-button>
+          <paper-input value="[[ formatDate(toDate, '', 'YYYY-MM-DD') ]]" class="dropdown-trigger" label="To">
+            <iron-icon suffix icon="date-range"></iron-icon>
+          </paper-input>
+          <paper-date-picker id="toDate" date="{{ toDate }}" class="dropdown-content" min-date="[[ fromDate ]]"></paper-date-picker>
+        </paper-menu-button>
+      </div>
+
+      <paper-progress indeterminate hidden$="[[ !loading ]]"></paper-progress>
+
+      <iron-data-table items="[[ orders ]]" id="table" empty$="[[ !_hasOrders(orders) ]]">
+        <data-table-column name="Reference" sort-by="shortReference" filter-by="shortReference">
+          <template><a href="javascript:void(0);" on-tap="_viewOrder">[[ item.shortReference ]]</a></template>
+        </data-table-column>
+        <data-table-column name="Created" sort-by="dateCreated" filter-by="dateCreated">
+          <template>[[ formatDate(item.dateCreated, '', 'YYYY-MM-DD @ HH:mm') ]]</template>
+        </data-table-column>
+        <data-table-column name="Payment status" sort-by="paymentStatus.status" filter-by="paymentStatus.status">
+          <template>[[ item.paymentStatus.status ]]</template>
+        </data-table-column>
+        <data-table-column name="Delivery type" sort-by="deliveryType" filter-by="deliveryType">
+          <template>[[ item.deliveryType ]]</template>
+        </data-table-column>
+        <data-table-column name="Delivery fee" sort-by="deliveryCost" filter-by="deliveryCost">
+          <template>[[ item.deliveryCost ]]</template>
+        </data-table-column>
+        <data-table-column name="Amount" sort-by="amount" filter-by="amount" flex="0">
+          <template>[[ item.amount ]]</template>
+        </data-table-column>
+        <data-table-column name="Customer" sort-by="user.profile.firstName" filter-by="user.profile.firstName">
+          <template>[[ item.user.profile.firstName ]] [[ item.user.profile.surname ]]</template>
+        </data-table-column>
+      </iron-data-table>
+    </paper-card>
+
+    <p hidden$="[[ _hasOrders(orders) ]]" loading$="[[ loading ]]" class="error-message">No orders</p>
+
+  </template>
+
+  <script>
+    (function() {
+      Polymer({
+        is: 'oc-order-table',
+        behaviors: [OC.Behaviours.Formatter],
+
+        /**
+         * Fired when a user clicked on an order link.
+         * @param {Number} detail The order id
+         * @event oc-view-order
+         */
+
+        properties: {
+          /**
+           * The orders to display in the table
+           */
+          orders: {
+            type: Array,
+            value: []
+          },
+          /**
+           * Is the table loading
+           */
+          loading: {
+            type: Boolean,
+            value: false
+          },
+          /**
+           * The selected from date of the orders. (default 1 month ago)
+           */
+          fromDate: {
+            type: Date,
+            notify: true,
+            value: function() {
+              return this.newMoment().subtract(1, 'M').toDate();
+            }
+          },
+          /**
+           * The selected to date of the orders. (default today)
+           */
+          toDate: {
+            type: Date,
+            notify: true,
+            value: function() {
+              return new Date();
+            }
+          }
+        },
+
+        observers: [
+          '_ensureDateRangeValidity(fromDate, toDate)'
+        ],
+
+        _viewOrder: function(event) {
+          this.fire('oc-view-order', event.model.item.id);
+        },
+
+        _hasOrders: function(orders) {
+          return orders && orders.length > 0;
+        },
+
+        _ensureDateRangeValidity: function(fromDate, toDate) {
+          if (fromDate > toDate) {
+            this.toDate = fromDate;
+          }
+        }
+
+      });
+    })();
+  </script>
+
+</dom-module>

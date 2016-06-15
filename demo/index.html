@@ -1,0 +1,60 @@
+<!doctype html>
+<html>
+  <head>
+    <title>oc-order-table demo</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+
+    <link rel="import" href="../../iron-demo-helpers/demo-pages-shared-styles.html">
+    <link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
+
+    <link rel="import" href="../oc-order-table.html">
+
+    <style is="custom-style" include="demo-pages-shared-styles">
+    </style>
+  </head>
+  <body>
+
+    <div class="vertical-section-container centered">
+      <h3>Basic oc-order-table Demo</h3>
+      <demo-snippet>
+        <template>
+          <oc-order-table></oc-order-table>
+
+          <script>
+          (function() {
+            var table = document.querySelector('oc-order-table');
+            table.orders = [
+              {
+                id:400,
+                shortReference:"XYZ000000400",
+                dateCreated:"2016-03-02 14:27:42.371",
+                paymentStatus:{status:"PAID"},
+                user:{
+                  profile:{
+                    firstName:"John", surname:"Doe"
+                  }
+                },
+                amount:171.91,
+                deliveryType:"DELIVERY",
+                deliveryCost:32.95
+              }
+            ];
+          })();
+          </script>
+        </template>
+      </demo-snippet>
+    </div>
+
+    <div class="vertical-section-container centered">
+      <h3>Empty oc-order-table Demo</h3>
+      <demo-snippet>
+        <template>
+          <oc-order-table></oc-order-table>
+        </template>
+      </demo-snippet>
+    </div>
+
+  </body>
+</html>
