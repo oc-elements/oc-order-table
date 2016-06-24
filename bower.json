@@ -12,7 +12,8 @@
     "paper-progress": "PolymerElements/paper-progress#^1.0.9",
     "paper-menu-button": "PolymerElements/paper-menu-button#^1.1.0",
     "iron-data-table": "^1.0.0-beta3",
-    "paper-date-picker": "polymer-paper-date-picker#^1.1.4"
+    "paper-date-picker": "polymer-paper-date-picker#^1.1.4",
+    "oc-iron-data-table-styles": "^0.1.0"
   },
   "devDependencies": {
     "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
