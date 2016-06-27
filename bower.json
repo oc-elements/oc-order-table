@@ -4,7 +4,6 @@
   "main": "oc-order-table.html",
   "dependencies": {
     "polymer": "Polymer/polymer#^1.4.0",
-    "oc-core-utils": "^0.1.0",
     "iron-icons": "PolymerElements/iron-icons#^1.1.3",
     "iron-icon": "PolymerElements/iron-icon#^1.0.8",
     "paper-card": "PolymerElements/paper-card#^1.1.1",
@@ -13,7 +12,8 @@
     "paper-menu-button": "PolymerElements/paper-menu-button#^1.1.0",
     "iron-data-table": "^1.0.0-beta3",
     "paper-date-picker": "polymer-paper-date-picker#^1.1.4",
-    "oc-iron-data-table-styles": "^0.1.0"
+    "oc-core-utils": "git://github.com/oc-elements/oc-core-utils#1.x",
+    "oc-iron-data-table-styles": "git://github.com/oc-elements/oc-iron-data-table-styles#1.x"
   },
   "devDependencies": {
     "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
